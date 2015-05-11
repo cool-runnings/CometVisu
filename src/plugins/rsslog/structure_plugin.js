@@ -145,7 +145,7 @@ function refreshRSSlog( data, isBig ) {
           return; // avoid the request
         }
         
-	if (!o.src.match(/rsslog\.php/) && !o.src.match(/rsslog_mysql\.php/)) {
+	if (!o.src.match(/rsslog\.php/) && !o.src.match(/rsslog_mysql\.php/) && !o.src.match(/rsscal\.php/)) {
 	  extsource = true; // for later changes to tell if internal or external source being used
 	  var wrapper = "plugins/rsslog/rsslog_external.php?url="
           o.src = wrapper.concat(o.src);
@@ -222,12 +222,17 @@ function refreshRSSlog( data, isBig ) {
                   (itemHtml.replace(/{date}/, entryDate.strftime(o.timeformat) + '&nbsp;')) : 
                   (itemHtml.replace(/{date}/, entryDate.toLocaleDateString() + ' ' + entryDate.toLocaleTimeString() + '&nbsp;'));
                 var thisday = entryDate.strftime('%d');
-                separatoradd = ((separatordate > 0) && (separatordate != thisday));
+                separatoradd = ((i > itemoffset) && (separatordate > 0) && (separatordate != thisday));
                 separatordate = thisday;  
               }
               else {
                 itemHtml = itemHtml.replace(/{date}/, '');
               }
+              var rowbg = row;
+			  var today = new Date();
+			  if ( entryDate > today ) {
+			    rowbg = 'rsslogfuture';
+			  }
                             
               var $row = $('<li class="rsslogRow ' + row + '">').append(itemHtml);
               if (separatoradd) { 

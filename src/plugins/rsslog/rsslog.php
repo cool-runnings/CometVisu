@@ -251,7 +251,8 @@ function retrieve( $db, $filter, $state )
     $filters[$i] = " (tags LIKE '%" . sqlite_escape_string($val) . "%') ";
   }
   
-  $q = "SELECT id, title, content, tags, state, strftime('%s', t) AS t FROM Logs WHERE (" . implode('OR', $filters) . ")";
+  //$q = "SELECT id, title, content, tags, state, strftime('%s', t) AS t FROM Logs WHERE (" . implode('OR', $filters) . ")";
+  $q = "SELECT id, title, content, tags, state, strftime('%s', t) AS t FROM Logs WHERE ( (t  <= datetime('now')) AND(" . implode('OR', $filters) . "))";
   
   if (isset($state))
     $q .= " AND state=" . $state . " ";
