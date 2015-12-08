@@ -689,7 +689,7 @@ function TemplateEngine( undefined ) {
       if (!ret && m['defaultValue']) {
         ret = mapValue(m['defaultValue']);
       }
-      if (ret) {
+      if( ret !== undefined ) {
         return ret;
       }
     }
