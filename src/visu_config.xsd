@@ -762,7 +762,6 @@
     </xsd:sequence>
     <xsd:attribute ref="align" use="optional" />
     <xsd:attribute ref="flavour" use="optional" />
-	<xsd:attribute ref="class" use="optional" />
   </xsd:complexType>
 
   <xsd:complexType name="designtoggle">
