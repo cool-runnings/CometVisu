@@ -27,10 +27,8 @@ define([ 'jquery' ], function( $ ) {
     
     // Pipe-O-Matic:
     var pipes = svg.getElementsByClassName('pipe_group');
-    $(pipes).each(function(idx, pipe) {
+    $(pipes).each(function() {
       var pipe_group = this;
-      var ga = $(pipe).data('cometvisu-active');
-      templateEngine.addAddress(ga, 'svg');
       $(this).find('path').each(function() {
         var path = this;
         var halfsize = parseInt(parseFloat(path.style.strokeWidth) / 2);
@@ -141,26 +139,4 @@ define([ 'jquery' ], function( $ ) {
     s.textContent = keyframes;
     $('svg', svg).prepend(s);
   };
-  
-
-  
 }); // end define
-
-function trickomatic_initGAs() {
-  var src = this.src;
-  jQuery.ajaxSetup({async:false});
-  $.get(this.src, function(svg) { 
-    if( !svg ) return;  
-    // pipe-o-matic:
-    var pipes = svg.getElementsByClassName('pipe_group');
-    $(pipes).each(function(idx, pipe) {
-      var activeValues = $(pipe).data('cometvisu-active');
-      if ( !activeValues ) { return true; }
-      $(activeValues.split(' ')).each(function(idx, ga) {
-        templateEngine.addAddress(ga, 'svg');
-      });
-    });    
-  });
-  jQuery.ajaxSetup({async:true});
-};
-  
