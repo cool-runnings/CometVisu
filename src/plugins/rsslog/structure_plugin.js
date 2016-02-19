@@ -54,7 +54,8 @@ VisuDesign_Custom.prototype.addCreator("rsslog", {
       limit:      $el.attr("limit") ? +$el.attr("limit") : 0,
       timeformat: $el.attr("timeformat"),
       itemoffset: 0,
-      itemack:    $el.attr("itemack") || "modify" // allowed: modify, display, disable
+      itemack:    $el.attr("itemack") || "modify", // allowed: modify, display, disable
+	  future:     $el.attr("future"),
     });
     
     templateEngine.callbacks[ path.replace( /[0-9]*$/, '' ) ].beforePageChange.push( function(){
@@ -123,6 +124,14 @@ function refreshRSSlog( data, isBig ) {
         src += '?limit=' + limit;
       }
     }
+	var future = data.future;
+    if (future) {
+      if (src.match(/\?/)) {
+        src += '&future=' + future;
+      } else {
+        src += '?future=' + future;
+      }
+    }
     
     $('#'+data.id+(isBig?'_big':'')).rssfeedlocal({
       src: src,
@@ -169,7 +178,7 @@ function refreshRSSlog( data, isBig ) {
           return; // avoid the request
         }
         
-	if (!o.src.match(/rsslog\.php/) && !o.src.match(/rsslog_mysql\.php/) && !o.src.match(/rsscal\.php/)) {
+	if (!o.src.match(/rsslog\.php/) && !o.src.match(/rsslog_mysql\.php/)) {
 	  extsource = true; // for later changes to tell if internal or external source being used
 	  var wrapper = "plugins/rsslog/rsslog_external.php?url="
           o.src = wrapper.concat(o.src);
@@ -206,7 +215,7 @@ function refreshRSSlog( data, isBig ) {
 
             var items = result.responseData.feed.entries;
             var itemnum = items.length;
-	    //console.log('C: #%s, %i element(s) found, %i displayrow(s) available', $(c).attr('id'), itemnum, displayrows);
+        //console.log('C: #%s, %i element(s) found, %i displayrow(s) available', $(c).attr('id'), itemnum, displayrows);
                           
             var itemoffset = 0; // correct if mode='last' or itemnum<=displayrows
                           
@@ -230,6 +239,7 @@ function refreshRSSlog( data, isBig ) {
             var separatordate = new Date().strftime('%d');
             var separatoradd = false;
             var separatorprevday = false;
+            var isFuture = false;
             
             for (var i=itemoffset; i<last; i++) {  
               //console.log('C: #%s, processing item: %i of %i', $(c).attr('id'), i, itemnum);
@@ -246,17 +256,13 @@ function refreshRSSlog( data, isBig ) {
                   (itemHtml.replace(/{date}/, entryDate.strftime(o.timeformat) + '&nbsp;')) : 
                   (itemHtml.replace(/{date}/, entryDate.toLocaleDateString() + ' ' + entryDate.toLocaleTimeString() + '&nbsp;'));
                 var thisday = entryDate.strftime('%d');
-                separatoradd = ((i > itemoffset) && (separatordate > 0) && (separatordate != thisday));
+                separatoradd = ((separatordate > 0) && (separatordate != thisday));
                 separatordate = thisday;  
+                isFuture = (entryDate > new Date() );
               }
               else {
                 itemHtml = itemHtml.replace(/{date}/, '');
               }
-              var rowbg = row;
-			  var today = new Date();
-			  if ( entryDate > today ) {
-			    rowbg = 'rsslogfuture';
-			  }
                             
               var $row = $('<li class="rsslogRow ' + row + '">').append(itemHtml);
               if( item.mapping !== '' )
@@ -265,12 +271,20 @@ function refreshRSSlog( data, isBig ) {
                 var $span = $row.find('.mappedValue');
                 templateEngine.design.defaultValue2DOM( mappedValue, function(e){ $span.append(e); } );
               }
-              if (separatoradd) { 
+              if (separatoradd & idx !== 0) { 
                 $row.addClass('rsslog_separator');
                 separatorprevday = true; 
               }
+			  else {
+                separatorprevday = false;
+			  }
+			  
               if (separatorprevday == true) { 
                 $row.addClass(' rsslog_prevday'); 
+              }
+			  
+              if (isFuture) {
+                $row.addClass((row == 'rsslogodd') ? 'rsslog_futureeven' : 'rsslog_futureodd');
               }
 
               $row.data({ 'id': item.id, 'mapping': item.mapping });

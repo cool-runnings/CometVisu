@@ -22,7 +22,6 @@
 .rsslogBody {
   clear: left;
   /* width:100%; CM: why was this needed? */
-
 }
 
 .rsslogeven  {
@@ -30,11 +29,7 @@
 }
 
 .rsslogodd {
-  color: #A6A6A6;
-}
-
-.rsslogfuture  {
-  color: #ff9300;
+  color: #6E6E6E;
 }
 
 .rsslog_popup > ul > .rsslogRow {
@@ -46,12 +41,19 @@
 }
 
 .rsslog_separator {
-  border-top-style: solid;
+  border-top-style: double;
   border-color: #DDDDDD;
-  border-width: 1px;
 }
 
 .rsslog_prevday {
   opacity: .5;
   filter: alpha(opacity=50);
+}
+
+.rsslog_futureodd {
+  color: #ff9300;
+}
+
+.rsslog_futureeven {
+  color: #cc7600;
 }
