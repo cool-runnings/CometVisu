@@ -4,6 +4,8 @@
     CometVisu/Benutzerhandbuch
     CometVisu/handbook/de
     CometVisu/manual/de
+    CometVisu/0.8.0/manual/de
+    CometVisu/Manual
 
 #############################
 Willkommen bei der CometVisu!
@@ -14,12 +16,6 @@ Hausautomation. Sie kann direkt auf den KNX-Bus zugreifen (über
 den eibd, bzw. knxd) oder auf alles aus der
 `OpenHAB <http://www.openhab.org/>`__-Welt. Die aktuelle Version wird
 auf `Github <http://github.com/CometVisu/CometVisu>`__ veröffentlicht.
-
-.. HINT::
-    Diese Dokumentation wird zu Zeit von Grund auf neu aufgebaut ist
-    daher nicht vollständig. Solange noch nicht alle Inhalte übertragen
-    worden sind, dient das bekannte `CometVisu-Wiki <http://www.cometvisu.org>`__
-    als weitere Informationsquelle.
 
 .. _system-voraussetzungen:
 
