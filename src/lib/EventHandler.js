@@ -1,6 +1,6 @@
 /* EventHandler.js 
  * 
- * copyright (c) 2010-2016, Christian Mayer and the CometVisu contributers.
+ * copyright (c) 2010-2017, Christian Mayer and the CometVisu contributers.
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,6 +16,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA
  */
+
 
 define([], function() {
 
@@ -175,6 +176,16 @@ define([], function() {
         this._mouseEvent.moveRestrict = true;
         this._scrollElement = undefined;
         this._isWidget = false;
+      } else if( 'touchend' === event.type && 'A' === event.target.nodeName )
+      {
+        // simulate a click on link elements on touch devices as we are
+        // prevented default
+        var 
+          x = event.changedTouches[0].pageX - window.pageXOffset,
+          y = event.changedTouches[0].pageY - window.pageYOffset,
+          target = document.elementFromPoint(x, y);
+        if( target === event.target ) // did the touch stay on the element?
+          target.click();
       }
     };
 
